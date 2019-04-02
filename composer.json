@@ -1,0 +1,29 @@
+{
+    "name": "webgriffe/captainhook",
+    "description": "Provides some useful custom actions to be used with Captain Hook (a PHP GIT hooks library)",
+    "type": "library",
+    "require": {
+        "php": "7.1.*|7.2.*",
+        "captainhook/captainhook": "^4.1"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Webgriffe\\CaptainHook\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "spec\\Webgriffe\\CaptainHook\\": "spec/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Webgriffe SRL",
+            "email": "support@webgriffe.com"
+        }
+    ]
+}
