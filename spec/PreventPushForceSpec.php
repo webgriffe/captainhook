@@ -8,6 +8,7 @@ use CaptainHook\App\Hook\Action;
 use SebastianFeldmann\Git\Repository;
 use Webgriffe\CaptainHook\PreventPushForce;
 use PhpSpec\ObjectBehavior;
+use Webgriffe\CaptainHook\StdinReader;
 
 class PreventPushForceSpec extends ObjectBehavior
 {
@@ -25,14 +26,18 @@ class PreventPushForceSpec extends ObjectBehavior
         Config $config,
         IO $io,
         Repository $repository,
-        Config\Action $action
+        Config\Action $action,
+        StdinReader $stdinReader,
+        Config\Options $options
     )
     {
         $protectedBranches = ['master'];
-        // TODO simulate push froce to master branch
+        $options->get('protected-branch')->willReturn($protectedBranches);
+        $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL);
+        $action->getOptions()->willReturn($options);
         $this
             ->shouldThrow(new \Exception('Never force push or delete the "master" branch!'))
-            ->during('execute', [$config, $io, $repository, $action])
+            ->during('execute', [$config, $io, $repository, $action, $stdinReader])
         ;
     }
 
@@ -40,14 +45,18 @@ class PreventPushForceSpec extends ObjectBehavior
         Config $config,
         IO $io,
         Repository $repository,
-        Config\Action $action
+        Config\Action $action,
+        StdinReader $stdinReader,
+        Config\Options $options
     )
     {
         $protectedBranches = ['master'];
-        // TODO simulate push froce to task-123 branch
+        $options->get('protected-branch')->willReturn($protectedBranches);
+        $stdinReader->read()->willReturn('refs/heads/task123 1234 refs/heads/task123 1234'.PHP_EOL);
+        $action->getOptions()->willReturn($options);
         $this
             ->shouldNotThrow(\Throwable::class)
-            ->during('execute', [$config, $io, $repository, $action])
+            ->during('execute', [$config, $io, $repository, $action, $stdinReader])
         ;
     }
 }

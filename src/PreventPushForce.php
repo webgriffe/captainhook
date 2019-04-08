@@ -19,8 +19,18 @@ class PreventPushForce implements Action
      * @return void
      * @throws \Exception
      */
-    public function execute(Config $config, IO $io, Repository $repository, Config\Action $action): void
+    public function execute(Config $config, IO $io, Repository $repository, Config\Action $action, StdinReader $stdinReader = null): void
     {
+        if (!$stdinReader) {
+            $stdinReader = new StdinReader();
+        }
+        $stdin = $stdinReader->read();
+        //TODO with parameter --all stdin contains a list of branches to be pushed
+        //TODO we should get protected branch from captainhook options
+        list($localBranch, $localHash, $remoteBranch, $remoteHash) = explode(' ', $stdin);
+        if (strpos($remoteBranch, 'master') === false) {
+            return;
+        }
         throw new \Exception(sprintf('Never force push or delete the "master" branch!'));
     }
 }
