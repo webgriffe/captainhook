@@ -25,11 +25,13 @@ class PreventPushForce implements Action
             $stdinReader = new StdinReader();
         }
         $stdin = $stdinReader->read();
-        //TODO with parameter --all stdin contains a list of branches to be pushed
-        //TODO we should get protected branch from captainhook options
-        list($localBranch, $localHash, $remoteBranch, $remoteHash) = explode(' ', $stdin);
-        if (strpos($remoteBranch, 'master') === false) {
-            return;
+        $lines = explode(PHP_EOL, $stdin);
+        foreach ($lines as $line) {
+            //TODO we should get protected branch from captainhook options
+            list($localBranch, $localHash, $remoteBranch, $remoteHash) = explode(' ', $line);
+            if (strpos($remoteBranch, 'master') === false) {
+                return;
+            }
         }
         throw new \Exception(sprintf('Never force push or delete the "master" branch!'));
     }
