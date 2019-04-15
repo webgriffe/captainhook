@@ -32,8 +32,30 @@ class PreventPushForceSpec extends ObjectBehavior
     )
     {
         $protectedBranches = ['master'];
-        $options->get('protected-branch')->willReturn($protectedBranches);
+        $options->get('protected-branches')->willReturn($protectedBranches);
         $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL);
+        $action->getOptions()->willReturn($options);
+        $this
+            ->shouldThrow(new \Exception('Never force push or delete the "master" branch!'))
+            ->during('execute', [$config, $io, $repository, $action, $stdinReader])
+        ;
+    }
+
+    function it_should_throw_an_exception_if_it_is_a_forced_push_with_all_option(
+        Config $config,
+        IO $io,
+        Repository $repository,
+        Config\Action $action,
+        StdinReader $stdinReader,
+        Config\Options $options
+    )
+    {
+        $protectedBranches = ['master'];
+        $options->get('protected-branches')->willReturn($protectedBranches);
+        $stdinReader->read()->willReturn(
+            'refs/heads/master 1234 refs/heads/task123 1234'.PHP_EOL
+            .'refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL
+        );
         $action->getOptions()->willReturn($options);
         $this
             ->shouldThrow(new \Exception('Never force push or delete the "master" branch!'))
@@ -51,7 +73,7 @@ class PreventPushForceSpec extends ObjectBehavior
     )
     {
         $protectedBranches = ['master'];
-        $options->get('protected-branch')->willReturn($protectedBranches);
+        $options->get('protected-branches')->willReturn($protectedBranches);
         $stdinReader->read()->willReturn('refs/heads/task123 1234 refs/heads/task123 1234'.PHP_EOL);
         $action->getOptions()->willReturn($options);
         $this

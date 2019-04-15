@@ -10,7 +10,7 @@ use SebastianFeldmann\Git\Repository;
 class PreventPushForce implements Action
 {
     /**
-     * Executes the action.
+     * https://git-scm.com/docs/githooks#_pre_push to see pre-push standard input
      *
      * @param \CaptainHook\App\Config $config
      * @param \CaptainHook\App\Console\IO $io
@@ -26,13 +26,15 @@ class PreventPushForce implements Action
         }
         $stdin = $stdinReader->read();
         $lines = explode(PHP_EOL, $stdin);
+        array_pop($lines);
+        $protectedBranches = $action->getOptions()->get('protected-branches');
         foreach ($lines as $line) {
-            //TODO we should get protected branch from captainhook options
             list($localBranch, $localHash, $remoteBranch, $remoteHash) = explode(' ', $line);
-            if (strpos($remoteBranch, 'master') === false) {
-                return;
+            foreach ($protectedBranches as $protectedBranch) {
+                if (strpos($remoteBranch, $protectedBranch) !== false) {
+                    throw new \Exception(sprintf('Never force push or delete the "master" branch!'));
+                }
             }
         }
-        throw new \Exception(sprintf('Never force push or delete the "master" branch!'));
     }
 }
