@@ -100,4 +100,29 @@ class PreventPushForceSpec extends ObjectBehavior
             ->during('execute', [$config, $io, $repository, $action, $stdinReader])
         ;
     }
+
+    function it_should_throw_if_no_protected_branch_is_configured(
+        Config $config,
+        IO $io,
+        Repository $repository,
+        Config\Action $action,
+        StdinReader $stdinReader,
+        Config\Options $options
+    )
+    {
+        $options->get('protected-branches')->willReturn(null);
+        $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234' . PHP_EOL);
+        $action->getOptions()->willReturn($options);
+        $this
+            ->shouldThrow(
+                new \Error(
+                    sprintf(
+                        'You must configure the "protected-branches" option for the action "%s".',
+                        PreventPushForce::class
+                    )
+                )
+            )
+            ->during('execute', [$config, $io, $repository, $action, $stdinReader])
+        ;
+    }
 }

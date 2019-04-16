@@ -33,6 +33,14 @@ class PreventPushForce implements Action
         }
         $lines = explode(PHP_EOL, trim($stdin));
         $protectedBranches = $action->getOptions()->get('protected-branches');
+        if (empty($protectedBranches)) {
+            throw new \Error(
+                sprintf(
+                    'You must configure the "protected-branches" option for the action "%s".',
+                    __CLASS__
+                )
+            );
+        }
         foreach ($lines as $line) {
             $line = explode(' ', trim($line));
             /**
