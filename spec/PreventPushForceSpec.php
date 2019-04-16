@@ -35,8 +35,29 @@ class PreventPushForceSpec extends ObjectBehavior
         $options->get('protected-branches')->willReturn($protectedBranches);
         $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL);
         $action->getOptions()->willReturn($options);
+        // TODO simulate a forced push
         $this
             ->shouldThrow(new \Error('Never force push or delete the "master" branch!'))
+            ->during('execute', [$config, $io, $repository, $action, $stdinReader])
+        ;
+    }
+
+    function it_should_not_throw_an_exception_if_it_is_not_a_forced_push_to_a_protected_branch(
+        Config $config,
+        IO $io,
+        Repository $repository,
+        Config\Action $action,
+        StdinReader $stdinReader,
+        Config\Options $options
+    )
+    {
+        $protectedBranches = ['master'];
+        $options->get('protected-branches')->willReturn($protectedBranches);
+        $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL);
+        $action->getOptions()->willReturn($options);
+        // TODO simulate a not-forced push
+        $this
+            ->shouldNotThrow(\Throwable::class)
             ->during('execute', [$config, $io, $repository, $action, $stdinReader])
         ;
     }
@@ -57,6 +78,7 @@ class PreventPushForceSpec extends ObjectBehavior
             .'refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL
         );
         $action->getOptions()->willReturn($options);
+        // TODO simulate a forced push
         $this
             ->shouldThrow(new \Error('Never force push or delete the "master" branch!'))
             ->during('execute', [$config, $io, $repository, $action, $stdinReader])
@@ -76,6 +98,7 @@ class PreventPushForceSpec extends ObjectBehavior
         $options->get('protected-branches')->willReturn($protectedBranches);
         $stdinReader->read()->willReturn('refs/heads/task123 1234 refs/heads/task123 1234'.PHP_EOL);
         $action->getOptions()->willReturn($options);
+        // TODO simulate a forced push
         $this
             ->shouldNotThrow(\Throwable::class)
             ->during('execute', [$config, $io, $repository, $action, $stdinReader])
@@ -95,6 +118,7 @@ class PreventPushForceSpec extends ObjectBehavior
         $options->get('protected-branches')->willReturn($protectedBranches);
         $stdinReader->read()->willReturn('');
         $action->getOptions()->willReturn($options);
+        // TODO simulate a forced push
         $this
             ->shouldNotThrow(\Throwable::class)
             ->during('execute', [$config, $io, $repository, $action, $stdinReader])
@@ -113,6 +137,7 @@ class PreventPushForceSpec extends ObjectBehavior
         $options->get('protected-branches')->willReturn(null);
         $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234' . PHP_EOL);
         $action->getOptions()->willReturn($options);
+        // TODO simulate a forced push
         $this
             ->shouldThrow(
                 new \Error(
