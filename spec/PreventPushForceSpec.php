@@ -81,4 +81,23 @@ class PreventPushForceSpec extends ObjectBehavior
             ->during('execute', [$config, $io, $repository, $action, $stdinReader])
         ;
     }
+
+    function it_should_not_throw_if_nothing_is_pushed(
+        Config $config,
+        IO $io,
+        Repository $repository,
+        Config\Action $action,
+        StdinReader $stdinReader,
+        Config\Options $options
+    )
+    {
+        $protectedBranches = ['master'];
+        $options->get('protected-branches')->willReturn($protectedBranches);
+        $stdinReader->read()->willReturn('');
+        $action->getOptions()->willReturn($options);
+        $this
+            ->shouldNotThrow(\Throwable::class)
+            ->during('execute', [$config, $io, $repository, $action, $stdinReader])
+        ;
+    }
 }

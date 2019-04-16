@@ -28,6 +28,9 @@ class PreventPushForce implements Action
             $stdinReader = new StdinReader();
         }
         $stdin = $stdinReader->read();
+        if (empty($stdin)) {
+            return;
+        }
         $lines = explode(PHP_EOL, trim($stdin));
         $protectedBranches = $action->getOptions()->get('protected-branches');
         foreach ($lines as $line) {
