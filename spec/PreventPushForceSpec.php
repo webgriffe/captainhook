@@ -36,7 +36,7 @@ class PreventPushForceSpec extends ObjectBehavior
         $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL);
         $action->getOptions()->willReturn($options);
         $this
-            ->shouldThrow(new \Exception('Never force push or delete the "master" branch!'))
+            ->shouldThrow(new \Error('Never force push or delete the "master" branch!'))
             ->during('execute', [$config, $io, $repository, $action, $stdinReader])
         ;
     }
@@ -58,7 +58,7 @@ class PreventPushForceSpec extends ObjectBehavior
         );
         $action->getOptions()->willReturn($options);
         $this
-            ->shouldThrow(new \Exception('Never force push or delete the "master" branch!'))
+            ->shouldThrow(new \Error('Never force push or delete the "master" branch!'))
             ->during('execute', [$config, $io, $repository, $action, $stdinReader])
         ;
     }
