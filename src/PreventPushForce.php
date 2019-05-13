@@ -31,11 +31,6 @@ class PreventPushForce implements Action
         if (empty($stdin)) {
             return;
         }
-
-        if (!$this->isPushForce()){
-            return;
-        }
-
         $lines = explode(PHP_EOL, trim($stdin));
         $protectedBranches = $action->getOptions()->get('protected-branches');
         if (empty($protectedBranches)) {
@@ -62,17 +57,5 @@ class PreventPushForce implements Action
                 }
             }
         }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPushForce(): bool
-    {
-        // https://github.com/bigbinary/tiny_scripts/blob/master/git-hooks/hooks/pre-push
-        $ppid = posix_getppid();
-        $command = "ps -ocommand= -p ".$ppid;
-        $output = shell_exec($command);
-        return !(strpos($output, '-f') === false || strpos($output, '--force') === false);
     }
 }

@@ -4,8 +4,7 @@
     "type": "library",
     "require": {
         "php": "7.1.*|7.2.*",
-        "captainhook/captainhook": "^4.1",
-        "ext-posix": "*"
+        "captainhook/captainhook": "^4.1"
     },
     "require-dev": {
         "phpspec/phpspec": "^5.1"
