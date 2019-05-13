@@ -9,7 +9,7 @@ use CaptainHook\App\Console\IO;
 use CaptainHook\App\Hook\Action;
 use SebastianFeldmann\Git\Repository;
 
-class PreventPushForce implements Action
+final class PreventPushForce implements Action
 {
     /**
      * @var StdinReader
