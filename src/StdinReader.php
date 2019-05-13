@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Webgriffe\CaptainHook;
 
+/**
+ * @internal
+ */
 class StdinReader
 {
     /**
