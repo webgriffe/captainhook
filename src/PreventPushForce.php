@@ -12,6 +12,19 @@ use SebastianFeldmann\Git\Repository;
 class PreventPushForce implements Action
 {
     /**
+     * @var StdinReader
+     */
+    private $stdinReader;
+
+    public function __construct(StdinReader $stdinReader = null)
+    {
+        $this->stdinReader = $stdinReader;
+        if (!$this->stdinReader) {
+            $this->stdinReader = new StdinReader();
+        }
+    }
+
+    /**
      * https://git-scm.com/docs/githooks#_pre_push to see pre-push standard input
      *
      * @param Config $config
@@ -22,12 +35,9 @@ class PreventPushForce implements Action
      * @return void
      * @throws \Exception
      */
-    public function execute(Config $config, IO $io, Repository $repository, ConfigAction $action, StdinReader $stdinReader = null): void
+    public function execute(Config $config, IO $io, Repository $repository, ConfigAction $action): void
     {
-        if (!$stdinReader) {
-            $stdinReader = new StdinReader();
-        }
-        $stdin = $stdinReader->read();
+        $stdin = $this->stdinReader->read();
         if (empty($stdin)) {
             return;
         }
