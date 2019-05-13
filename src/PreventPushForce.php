@@ -39,7 +39,6 @@ final class PreventPushForce implements Action
      * @param IO $io
      * @param Repository $repository
      * @param ConfigAction $action
-     * @param StdinReader|null $stdinReader
      * @return void
      * @throws \Exception
      */
