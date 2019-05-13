@@ -6,12 +6,19 @@ use CaptainHook\App\Config;
 use CaptainHook\App\Console\IO;
 use CaptainHook\App\Hook\Action;
 use SebastianFeldmann\Git\Repository;
+use Webgriffe\CaptainHook\ForceDetector;
 use Webgriffe\CaptainHook\PreventPushForce;
 use PhpSpec\ObjectBehavior;
 use Webgriffe\CaptainHook\StdinReader;
 
 class PreventPushForceSpec extends ObjectBehavior
 {
+    function let(StdinReader $stdinReader, ForceDetector $forceDetector)
+    {
+        $forceDetector->isForceUsed()->willReturn(true);
+        $this->beConstructedWith($stdinReader, $forceDetector);
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType(PreventPushForce::class);
@@ -23,20 +30,18 @@ class PreventPushForceSpec extends ObjectBehavior
     }
 
     function it_should_throw_an_exception_if_it_is_a_forced_push_to_a_protected_branch(
+        StdinReader $stdinReader,
         Config $config,
         IO $io,
         Repository $repository,
         Config\Action $action,
-        StdinReader $stdinReader,
         Config\Options $options
     )
     {
         $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL);
-        $this->beConstructedWith($stdinReader);
         $protectedBranches = ['master'];
         $options->get('protected-branches')->willReturn($protectedBranches);
         $action->getOptions()->willReturn($options);
-        // TODO simulate a forced push
         $this
             ->shouldThrow(new \Error('Never force push or delete the "master" branch!'))
             ->during('execute', [$config, $io, $repository, $action])
@@ -44,20 +49,20 @@ class PreventPushForceSpec extends ObjectBehavior
     }
 
     function it_should_not_throw_an_exception_if_it_is_not_a_forced_push_to_a_protected_branch(
+        StdinReader $stdinReader,
+        ForceDetector $forceDetector,
         Config $config,
         IO $io,
         Repository $repository,
         Config\Action $action,
-        StdinReader $stdinReader,
         Config\Options $options
     )
     {
         $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL);
-        $this->beConstructedWith($stdinReader);
+        $forceDetector->isForceUsed()->willReturn(false);
         $protectedBranches = ['master'];
         $options->get('protected-branches')->willReturn($protectedBranches);
         $action->getOptions()->willReturn($options);
-        // TODO simulate a not-forced push
         $this
             ->shouldNotThrow(\Throwable::class)
             ->during('execute', [$config, $io, $repository, $action])
@@ -65,11 +70,11 @@ class PreventPushForceSpec extends ObjectBehavior
     }
 
     function it_should_throw_an_exception_if_it_is_a_forced_push_with_all_option(
+        StdinReader $stdinReader,
         Config $config,
         IO $io,
         Repository $repository,
         Config\Action $action,
-        StdinReader $stdinReader,
         Config\Options $options
     )
     {
@@ -77,11 +82,9 @@ class PreventPushForceSpec extends ObjectBehavior
             'refs/heads/master 1234 refs/heads/task123 1234'.PHP_EOL
             .'refs/heads/master 1234 refs/heads/master 1234'.PHP_EOL
         );
-        $this->beConstructedWith($stdinReader);
         $protectedBranches = ['master'];
         $options->get('protected-branches')->willReturn($protectedBranches);
         $action->getOptions()->willReturn($options);
-        // TODO simulate a forced push
         $this
             ->shouldThrow(new \Error('Never force push or delete the "master" branch!'))
             ->during('execute', [$config, $io, $repository, $action])
@@ -89,20 +92,18 @@ class PreventPushForceSpec extends ObjectBehavior
     }
 
     function it_should_not_throw_an_exception_if_it_is_a_forced_push_to_an_unprotected_branch(
+        StdinReader $stdinReader,
         Config $config,
         IO $io,
         Repository $repository,
         Config\Action $action,
-        StdinReader $stdinReader,
         Config\Options $options
     )
     {
         $stdinReader->read()->willReturn('refs/heads/task123 1234 refs/heads/task123 1234'.PHP_EOL);
-        $this->beConstructedWith($stdinReader);
         $protectedBranches = ['master'];
         $options->get('protected-branches')->willReturn($protectedBranches);
         $action->getOptions()->willReturn($options);
-        // TODO simulate a forced push
         $this
             ->shouldNotThrow(\Throwable::class)
             ->during('execute', [$config, $io, $repository, $action])
@@ -110,20 +111,18 @@ class PreventPushForceSpec extends ObjectBehavior
     }
 
     function it_should_not_throw_if_nothing_is_pushed(
+        StdinReader $stdinReader,
         Config $config,
         IO $io,
         Repository $repository,
         Config\Action $action,
-        StdinReader $stdinReader,
         Config\Options $options
     )
     {
         $stdinReader->read()->willReturn('');
-        $this->beConstructedWith($stdinReader);
         $protectedBranches = ['master'];
         $options->get('protected-branches')->willReturn($protectedBranches);
         $action->getOptions()->willReturn($options);
-        // TODO simulate a forced push
         $this
             ->shouldNotThrow(\Throwable::class)
             ->during('execute', [$config, $io, $repository, $action])
@@ -131,19 +130,17 @@ class PreventPushForceSpec extends ObjectBehavior
     }
 
     function it_should_throw_if_no_protected_branch_is_configured(
+        StdinReader $stdinReader,
         Config $config,
         IO $io,
         Repository $repository,
         Config\Action $action,
-        StdinReader $stdinReader,
         Config\Options $options
     )
     {
         $stdinReader->read()->willReturn('refs/heads/master 1234 refs/heads/master 1234' . PHP_EOL);
-        $this->beConstructedWith($stdinReader);
         $options->get('protected-branches')->willReturn(null);
         $action->getOptions()->willReturn($options);
-        // TODO simulate a forced push
         $this
             ->shouldThrow(
                 new \Error(

@@ -15,12 +15,20 @@ class PreventPushForce implements Action
      * @var StdinReader
      */
     private $stdinReader;
+    /**
+     * @var ForceDetector
+     */
+    private $forceDetector;
 
-    public function __construct(StdinReader $stdinReader = null)
+    public function __construct(StdinReader $stdinReader = null, ForceDetector $forceDetector = null)
     {
         $this->stdinReader = $stdinReader;
+        $this->forceDetector = $forceDetector;
         if (!$this->stdinReader) {
             $this->stdinReader = new StdinReader();
+        }
+        if (!$this->forceDetector) {
+            $this->forceDetector = new ForceDetector();
         }
     }
 
@@ -39,6 +47,9 @@ class PreventPushForce implements Action
     {
         $stdin = $this->stdinReader->read();
         if (empty($stdin)) {
+            return;
+        }
+        if (!$this->forceDetector->isForceUsed()) {
             return;
         }
         $lines = explode(PHP_EOL, trim($stdin));
