@@ -1,6 +1,6 @@
 # Webgriffe CaptainHook
 
-A collection of useful actions to be used with [CaptainHook](https://github.com/CaptainHookPhp/captainhook).
+A collection of useful conditions and actions to be used with [CaptainHook](https://github.com/CaptainHookPhp/captainhook).
 
 [![Build Status](https://travis-ci.org/webgriffe/captainhook.svg?branch=master)](https://travis-ci.org/webgriffe/captainhook)
 
