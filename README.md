@@ -2,6 +2,8 @@
 
 A collection of useful actions to be used with [CaptainHook](https://github.com/CaptainHookPhp/captainhook).
 
+[![Build Status](https://travis-ci.org/webgriffe/captainhook.svg?branch=master)](https://travis-ci.org/webgriffe/captainhook)
+
 ## Install
 
 Given that you already have CaptainHook in your project you can simply use [Composer](https://getcomposer.org/) to have these `webgriffe/captainhook` actions available:
