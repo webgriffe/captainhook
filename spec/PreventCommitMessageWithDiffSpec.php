@@ -39,7 +39,7 @@ class PreventCommitMessageWithDiffSpec extends ObjectBehavior
             ->during('execute', [$config, $io, $repository, $action]);
     }
 
-    function it_should_not_throw_an_exception_if_diff_is_present_in_commit_message(
+    function it_should_not_throw_an_exception_if_diff_is_not_present_in_commit_message(
         Config $config,
         IO $io,
         Repository $repository,
