@@ -5,7 +5,7 @@
     "require": {
         "php": "7.1.*|7.2.*",
         "ext-posix": "*",
-        "captainhook/captainhook": "^4.1"
+        "captainhook/captainhook": "^4.3.1"
     },
     "require-dev": {
         "phpspec/phpspec": "^5.1"
