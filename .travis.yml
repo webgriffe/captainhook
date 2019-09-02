@@ -7,6 +7,8 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-install: composer install
+install:
+    - composer install
+    - composer global require maglnet/composer-require-checker && $HOME/.composer/vendor/bin/composer-require-checker
 
 script: vendor/bin/phpspec run
