@@ -53,6 +53,22 @@ You can use the `protected-branches` option to add other branches to the protect
     // ...
 ```
 
+### 3. Prevent commit if some files have the same name but different case
+
+```json
+    // captainhook.json
+    // ...
+    "commit-msg": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "\\Webgriffe\\CaptainHook\\PreventCommitCaseSensitiveSameFilename"
+            }
+        ]
+    },
+    // ...
+```
+
 ## License
 
 This library is under the MIT license. See the complete license in the LICENSE file.
