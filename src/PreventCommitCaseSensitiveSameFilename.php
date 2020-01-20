@@ -30,7 +30,8 @@ class PreventCommitCaseSensitiveSameFilename implements Action
         if (!empty($caseSensitiveFilenames)) {
             throw new \Error(
                 sprintf(
-                    'Found some files that has the same filename but with different case: ' . PHP_EOL . '%s',
+                    'Found some files that have the same filename but different letters capitalization: ' . PHP_EOL .
+                    '%s',
                     implode("\n", $caseSensitiveFilenames)
                 )
             );

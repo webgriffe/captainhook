@@ -22,7 +22,7 @@ class PreventCommitCaseSensitiveSameFilenameSpec extends ObjectBehavior
         $this->shouldImplement(Action::class);
     }
 
-    function it_should_throw_an_exception_when_there_are_case_sensitive_files(
+    function it_should_throw_an_exception_when_there_are_files_with_same_filename_but_different_letters_capitalization(
         Config $config,
         IO $io,
         Repository $repository,
@@ -34,12 +34,15 @@ class PreventCommitCaseSensitiveSameFilenameSpec extends ObjectBehavior
 
         $this
             ->shouldThrow(
-                new \Error('Found some files that has the same filename but with different case: ' . PHP_EOL . 'A')
+                new \Error(
+                    'Found some files that have the same filename but different letters capitalization: ' . PHP_EOL .
+                    'A'
+                )
             )
             ->during('execute', [$config, $io, $repository, $action]);
     }
 
-    function it_should_not_throw_an_exception_when_there_are_no_case_sensitive_files(
+    function it_should_not_throw_an_exception_when_there_are_no_files_with_same_filename_but_different_letters_capitalization(
         Config $config,
         IO $io,
         Repository $repository,
