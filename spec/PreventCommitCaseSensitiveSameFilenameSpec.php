@@ -37,7 +37,7 @@ class PreventCommitCaseSensitiveSameFilenameSpec extends ObjectBehavior
             ->during('execute', [$config, $io, $repository, $action]);
     }
 
-    function it_should_throw_an_exception_when_there_are_files_with_same_filename_but_different_letters_capitalization(
+    function it_should_throw_when_there_are_files_with_same_names_but_different_letters_capitalization(
         Config $config,
         IO $io,
         Repository $repository,
@@ -57,7 +57,7 @@ class PreventCommitCaseSensitiveSameFilenameSpec extends ObjectBehavior
             ->during('execute', [$config, $io, $repository, $action]);
     }
 
-    function it_should_not_throw_an_exception_when_there_are_no_files_with_same_filename_but_different_letters_capitalization(
+    function it_should_not_throw_when_there_arent_any_files_with_same_names_but_different_letters_capitalization(
         Config $config,
         IO $io,
         Repository $repository,
