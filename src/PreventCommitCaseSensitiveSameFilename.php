@@ -23,9 +23,17 @@ class PreventCommitCaseSensitiveSameFilename implements Action
      */
     public function execute(Config $config, IO $io, Repository $repository, ConfigAction $action): void
     {
+        $caseSensitiveFilenames = [];
         $changedFiles = $repository->getIndexOperator()->getStagedFiles();
-        $uniqueFileNames = array_unique(array_map('strtolower', $changedFiles));
-        $caseSensitiveFilenames = array_diff($changedFiles, $uniqueFileNames);
+        $countChanged = count($changedFiles);
+        for ($i = 0; $i < $countChanged - 1; ++$i) {
+            for ($j = $i + 1; $j < $countChanged; ++$j) {
+                if (strtolower($changedFiles[$i]) === strtolower($changedFiles[$j])) {
+                    $caseSensitiveFilenames[] = $changedFiles[$i];
+                    continue 2;
+                }
+            }
+        }
 
         if (!empty($caseSensitiveFilenames)) {
             throw new \Error(

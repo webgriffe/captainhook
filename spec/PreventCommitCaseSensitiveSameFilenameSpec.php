@@ -36,7 +36,7 @@ class PreventCommitCaseSensitiveSameFilenameSpec extends ObjectBehavior
             ->shouldThrow(
                 new \Error(
                     'Found some files that have the same filename but different letters capitalization: ' . PHP_EOL .
-                    'A'
+                    'a'
                 )
             )
             ->during('execute', [$config, $io, $repository, $action]);
@@ -49,7 +49,7 @@ class PreventCommitCaseSensitiveSameFilenameSpec extends ObjectBehavior
         Config\Action $action,
         Index $index
     ) {
-        $index->getStagedFiles()->shouldBeCalled()->willReturn(['a', 'b', 'c']);
+        $index->getStagedFiles()->shouldBeCalled()->willReturn(['a', 'B', 'c']);
         $repository->getIndexOperator()->shouldBeCalled()->willReturn($index);
 
         $this
