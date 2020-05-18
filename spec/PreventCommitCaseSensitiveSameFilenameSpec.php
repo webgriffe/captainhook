@@ -22,6 +22,21 @@ class PreventCommitCaseSensitiveSameFilenameSpec extends ObjectBehavior
         $this->shouldImplement(Action::class);
     }
 
+    function it_should_not_throw_when_there_arent_any_changed_files(
+        Config $config,
+        IO $io,
+        Repository $repository,
+        Config\Action $action,
+        Index $index
+    ) {
+        $index->getStagedFiles()->shouldBeCalled()->willReturn([]);
+        $repository->getIndexOperator()->shouldBeCalled()->willReturn($index);
+
+        $this
+            ->shouldNotThrow(\Throwable::class)
+            ->during('execute', [$config, $io, $repository, $action]);
+    }
+
     function it_should_throw_an_exception_when_there_are_files_with_same_filename_but_different_letters_capitalization(
         Config $config,
         IO $io,
