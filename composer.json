@@ -6,7 +6,7 @@
         "php": "7.1.*|7.2.*|7.3.*",
         "ext-posix": "*",
         "captainhook/captainhook": "^5.2.1",
-        "sebastianfeldmann/git": "^3.1"
+        "sebastianfeldmann/git": "^2.2"
     },
     "require-dev": {
         "phpspec/phpspec": "^5.1"
