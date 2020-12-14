@@ -8,6 +8,9 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+before_install:
+    - composer self-update --1
+
 install:
     - composer install
     - composer global require maglnet/composer-require-checker && $HOME/.composer/vendor/bin/composer-require-checker
