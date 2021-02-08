@@ -14,6 +14,6 @@ before_install:
 
 install:
     - composer install
-    - composer global require maglnet/composer-require-checker && $HOME/.composer/vendor/bin/composer-require-checker
+    - composer global require maglnet/composer-require-checker:^3.0.0 && $HOME/.composer/vendor/bin/composer-require-checker
 
 script: vendor/bin/phpspec run
