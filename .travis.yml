@@ -24,7 +24,11 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
-    - composer self-update --1
+    - if [ $COMPOSER_REQUIRE_CHECKER_VERSION = "2.1.0" ]; then
+        composer self-update --1;
+      else
+        composer self-update;
+      fi
 
 install:
     - composer install
