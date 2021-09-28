@@ -3,7 +3,7 @@
     "description": "Provides some useful custom actions to be used with Captain Hook (a PHP GIT hooks library)",
     "type": "library",
     "require": {
-        "php": "7.2.*|7.3.*|7.4.*",
+        "php": "^7.2 || ^8.0",
         "ext-posix": "*",
         "captainhook/captainhook": "^5.0",
         "sebastianfeldmann/git": "^3.1"
